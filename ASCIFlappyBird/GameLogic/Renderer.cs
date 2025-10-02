@@ -9,19 +9,22 @@ namespace ASCIFlappyBird.GameLogic
 {
     public class Renderer
     {
-        public void DrawFrame(char[,] frameBuffer)
+
+        public void DrawFrame(Board board)
         {
-            Console.Clear();
-            int height = frameBuffer.GetLength(0);
-            int width = frameBuffer.GetLength(1);
-            for (int y = 0; y < height; y++)
+            var boardWidth = board.WindowWidth - board.MarginX;
+            var boardHeight = board.WindowHeight - board.MarginY;
+            TrySetCursorPosition(0, 0);
+                Console.Write(new string('#', boardWidth));
+            for (int y = 1; y < boardHeight; y++)
             {
-                for (int x = 0; x < width; x++)
-                {
-                    Console.Write(frameBuffer[y, x]);
-                }
-                Console.WriteLine();
+                TrySetCursorPosition(0, y);
+                Console.Write('#');
+                TrySetCursorPosition(boardWidth - 1, y);
+                Console.Write('#');
             }
+            TrySetCursorPosition(0, boardHeight);
+            Console.Write(new string('#', boardWidth));
         }
         public void DrawGameOver(int score)
         {
@@ -31,20 +34,15 @@ namespace ASCIFlappyBird.GameLogic
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
-        public void DrawBird(Bird bird, char[,] frameBuffer)
+        public bool TrySetCursorPosition(int x, int y)
         {
-            for (int y = 0; y < bird.Height; y++)
-            {
-                for (int x = 0; x < bird.Width; x++)
-                {
-                    int drawX = bird.Position.x + x;
-                    int drawY = bird.Position.y + y;
-                    if (drawX >= 0 && drawX < frameBuffer.GetLength(1) && drawY >= 0 && drawY < frameBuffer.GetLength(0))
-                    {
-                        frameBuffer[drawY, drawX] = 'O';
-                    }
-                }
+            if (x >= 0 && x < Console.BufferWidth && y >= 0 && y < Console.BufferHeight)
+            {                
+                Console.SetCursorPosition(x, y);
+                return true;
             }
+
+            return false;
         }
     }
 }
