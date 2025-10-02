@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace ASCIFlappyBird.Services
 {
-    internal class BirdService
+    public class BirdService
     {
+        
     }
 }
