@@ -16,11 +16,11 @@ namespace ASCIFlappyBird.GameLogic
             var boardHeight = board.WindowHeight - board.MarginY;
             TrySetCursorPosition(0, 0);
                 Console.Write(new string('#', boardWidth));
-            for (int y = 1; y < boardHeight; y++)
+            for (int y = 0; y <= boardHeight; y++)
             {
                 TrySetCursorPosition(0, y);
                 Console.Write('#');
-                TrySetCursorPosition(boardWidth - 1, y);
+                TrySetCursorPosition(boardWidth, y);
                 Console.Write('#');
             }
             TrySetCursorPosition(0, boardHeight);

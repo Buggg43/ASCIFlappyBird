@@ -26,7 +26,7 @@ namespace ASCIFlappyBird.Models
             if (board.WindowWidth != newW || board.WindowHeight != newH)
             {
                 Console.Clear();
-                Console.Write("\x1b[3J"); // escape sequence to clear scrollback buffer
+                Console.Write("\x1b[3J");
                 Console.SetWindowPosition(0, 0);
                 Console.SetCursorPosition(0, 0);
                 Console.SetBufferSize(newW, newH);
@@ -39,6 +39,5 @@ namespace ASCIFlappyBird.Models
                 WindowResized = false;
             }
         }
-
     }
 }
