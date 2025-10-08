@@ -83,8 +83,8 @@ public class Program
                     }
                 }
                 _birdService.ApplyGravity(_bird, _board, BirdDtMs / 1000.0);
-                Console.SetCursorPosition(_board.Center.x, _board.Center.y);
-                Console.Write($"Bird VP: {_bird.VerticalPosition} / VS: {_bird.VerticalSpeed}  "); // Move cursor to top-left and write score
+                //Console.SetCursorPosition(_board.Center.x, _board.Center.y);
+                //Console.Write($"Bird VP: {_bird.VerticalPosition} / VS: {_bird.VerticalSpeed}  "); 
             }
             while(worldAccumulatorMs >= WorldDtMs)
             {
@@ -102,12 +102,13 @@ public class Program
                         var gapTop = p.GapCenterY - (p.GapHeight / 2);
                         var gapBottom = p.GapCenterY + (p.GapHeight / 2);
                         var playTop = _board.MarginY + 1;
-                        Console.SetCursorPosition(screenX, Math.Max(playTop, gapTop - 1)); 
-                        Console.Write("^");
+                        _renderer.DrawPillars(_board, _pillars, scrollOffset);
+                        //Console.SetCursorPosition(screenX, Math.Max(playTop, gapTop - 1)); 
+                        //Console.Write("^");
                     }
                 }
-                Console.SetCursorPosition(_board.Center.x, _board.Center.y+2);
-                Console.Write($"World SC: {worldScrollCells} ");
+                //Console.SetCursorPosition(_board.Center.x, _board.Center.y+2);
+                //Console.Write($"World SC: {worldScrollCells} ");
             }
             while(nextSpawnWorldX <= worldScrollCells + playRight)
             {
@@ -125,15 +126,19 @@ public class Program
                 nextSpawnWorldX += rng.Next(24, 33);
                 if (_pillars.Count > 0)
                 {
-                    Console.SetCursorPosition(2, _board.Center.y + 4);
-                    Console.Write($"Pillars: {_pillars.Count}, last X={_pillars[^1].WorldX:F1}   "); 
+                    
+                    //Console.SetCursorPosition(2, _board.Center.y + 4);
+                    //Console.Write($"Pillars: {_pillars.Count}, last X={_pillars[^1].WorldX:F1}   "); 
                 }
             }
+            
             if (_board.Collision)
             {
                 break;
             }
+            
             Thread.Sleep(50);
         }
     }
 }
+

@@ -34,6 +34,28 @@ namespace ASCIFlappyBird.GameLogic
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
+        public void DrawPillars(Board board,List<Pillar> pillars, int scrollOffset)
+        {
+            var pilarsOnScreen = pillars.Where(s => s.WorldX < board.WindowWidth - board.MarginX);
+            foreach (var pilar in pilarsOnScreen)
+            {             
+                var playH = board.WindowHeight - board.MarginY;
+                var gapToDraw = pilar.GapHeight / 2; // Drawing ++ half and - half on center of gap
+                var gapTop = pilar.GapCenterY - gapToDraw;
+                var gapBottom = pilar.GapCenterY + gapToDraw;
+
+                for (int i = 1; i < playH; i++)
+                {
+                    if (i < gapTop || i > gapBottom)
+                    {
+                        TrySetCursorPosition(pilar.WorldX - scrollOffset, i);
+                        Console.Write("|");
+                        TrySetCursorPosition((pilar.WorldX + 1) - scrollOffset, i);
+                        Console.Write(" ");
+                    }
+                }
+            }
+        }
         public bool TrySetCursorPosition(int x, int y)
         {
             if (x >= 0 && x < Console.BufferWidth && y >= 0 && y < Console.BufferHeight)
