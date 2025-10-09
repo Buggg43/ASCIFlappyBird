@@ -16,7 +16,18 @@ namespace ASCIFlappyBird.Models
         public bool Collision { get; set; } = false;
         public bool WindowResized { get; set; } = false;
 
+        public int BoardWidth => WindowWidth - MarginX;
+        public int BoardHeight => WindowHeight - MarginY;
+        public int GameWindowLeft => 1;
+        public int GameWindowRight => BoardWidth - 1;
+        public int GameWindowTop => 1;
+        public int GameWindowBottom => BoardHeight - 1;
+        public int GameWindowWidth => GameWindowRight - GameWindowLeft;
+        public int GamwWindowHeight => GameWindowBottom - GameWindowTop;
+        
         public (int x, int y) Center => (WindowWidth / 2, WindowHeight / 2);
+
+        public int FirstSpawnScreenX => GameWindowLeft + (int)Math.Round(GameWindowWidth * 0.75);
 
 
         public void WindowChanged(Board board)

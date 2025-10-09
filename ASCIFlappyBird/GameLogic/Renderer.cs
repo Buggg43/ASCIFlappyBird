@@ -34,28 +34,53 @@ namespace ASCIFlappyBird.GameLogic
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
-        public void DrawPillars(Board board,List<Pillar> pillars, int scrollOffset)
+        public void DrawPillars(Board board, List<Pillar> pillars, int scrollOffset)
         {
-            var pilarsOnScreen = pillars.Where(s => s.WorldX < board.WindowWidth - board.MarginX);
-            foreach (var pilar in pilarsOnScreen)
-            {             
-                var playH = board.WindowHeight - board.MarginY;
-                var gapToDraw = pilar.GapHeight / 2; // Drawing ++ half and - half on center of gap
-                var gapTop = pilar.GapCenterY - gapToDraw;
-                var gapBottom = pilar.GapCenterY + gapToDraw;
+            // Pole gry (spójne z DrawFrame)
+            int playLeft = 1;
+            int playRight = board.WindowWidth - board.MarginX - 1;
+            int playTop = 1;
+            int playBottom = board.WindowHeight - board.MarginY - 1;
 
-                for (int i = 1; i < playH; i++)
+            const int pillarWidth = 2;
+
+            foreach (var p in pillars)
+            {
+                int screenX = p.WorldX - scrollOffset;
+
+                if (screenX > playRight || screenX + pillarWidth - 1 < playLeft)
+                    continue;
+
+                int gapTop = (int)Math.Floor(p.GapCenterY - p.GapHeight / 2.0);
+                int gapBottom = (int)Math.Ceiling(p.GapCenterY + p.GapHeight / 2.0);
+
+                gapTop = Math.Max(gapTop, playTop);
+                gapBottom = Math.Min(gapBottom, playBottom + 1);
+
+                for (int xCol = screenX; xCol < screenX + pillarWidth; xCol++)
                 {
-                    if (i < gapTop || i > gapBottom)
+                    if (xCol < playLeft || xCol > playRight) continue;
+
+                    for (int y = playTop; y <= gapTop - 1; y++)
                     {
-                        TrySetCursorPosition(pilar.WorldX - scrollOffset, i);
-                        Console.Write("|");
-                        TrySetCursorPosition((pilar.WorldX + 1) - scrollOffset, i);
-                        Console.Write(" ");
+                        if (TrySetCursorPosition(xCol, y)) Console.Write('|');
                     }
+                    for (int y = gapBottom; y <= playBottom; y++)
+                    {
+                        if (TrySetCursorPosition(xCol, y)) Console.Write('|');
+                    }
+
+                    int colHeight = playBottom - playTop + 1;
+                    for (int y = playTop; y <= playBottom; y++)
+                    {
+                        if (TrySetCursorPosition(xCol+2, y) && xCol < playRight-1) Console.Write(' ');
+                        if (TrySetCursorPosition(xCol , y) && xCol-1 < playLeft) Console.Write(new string(' ',pillarWidth));
+                    }
+
                 }
             }
         }
+
         public bool TrySetCursorPosition(int x, int y)
         {
             if (x >= 0 && x < Console.BufferWidth && y >= 0 && y < Console.BufferHeight)

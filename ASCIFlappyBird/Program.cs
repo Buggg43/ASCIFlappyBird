@@ -35,7 +35,7 @@ public class Program
         double birdAccumulatorMs = 0;
         const double BirdDtMs = 16;
         int score = 0;
-
+        const int pillarWidth = 2;
         int minGapY = 5,maxGapY = 9;
         while (true)
         {
@@ -43,28 +43,22 @@ public class Program
             var playRight = _board.WindowWidth - _board.MarginX - 1;
             var playWidth = playRight - playLeft;
 
+            
             _board.WindowChanged(_board);
             if (_board.WindowResized)
             {
                 _board.WindowResized = false;
                 _renderer.DrawFrame(_board);
                 var birdX = (int)Math.Round(playLeft + 0.25 * playWidth);
+                var scrollOffset = (int)Math.Floor(worldScrollCells);
                 _bird.VerticalPosition = _board.Center.y;
                 _bird.Position = (birdX, _board.Center.y);
+
                 if (!spawnPrimed)
                 {
-                    int boardWidth = (_board.WindowWidth - _board.MarginX) - 1 ;
-                    int playW = boardWidth - playLeft;
-
-                    double spawnFraction = 0.75;
-                    int firstSpawnScreenX = _board.MarginX + (int)Math.Round(playW * spawnFraction);
-
-                    int scrollOffset = (int)Math.Floor(worldScrollCells);
-                    nextSpawnWorldX = scrollOffset + firstSpawnScreenX;
-
+                    nextSpawnWorldX = scrollOffset + _board.FirstSpawnScreenX;
                     spawnPrimed = true;
                 }
-
             }
 
             var elapsedMs = sw.Elapsed.TotalMilliseconds;
@@ -83,55 +77,40 @@ public class Program
                     }
                 }
                 _birdService.ApplyGravity(_bird, _board, BirdDtMs / 1000.0);
-                //Console.SetCursorPosition(_board.Center.x, _board.Center.y);
-                //Console.Write($"Bird VP: {_bird.VerticalPosition} / VS: {_bird.VerticalSpeed}  "); 
             }
-            while(worldAccumulatorMs >= WorldDtMs)
+            while (worldAccumulatorMs >= WorldDtMs)
             {
                 worldAccumulatorMs -= WorldDtMs;
+
+                // 1) scroll
                 worldScrollCells += worldSpeedCellsPerSecond * (WorldDtMs / 1000.0);
                 var scrollOffset = (int)Math.Floor(worldScrollCells);
-                const int pillarWidth = 2;
-                _pillars.RemoveAll(p => p.WorldX + pillarWidth - 1 < scrollOffset + playLeft);
 
-                foreach (var p in _pillars )
+                int removedCount = _pillars.RemoveAll(p => p.WorldX + pillarWidth - 1 < scrollOffset + /* playLeft = */ 1);
+
+                if (_pillars.Count < 5) removedCount ++;
+
+                for (int i = 0; i < removedCount; i++)
                 {
-                    var screenX = p.WorldX - scrollOffset;
-                    if(playLeft <= screenX && screenX <= playRight)
+                    int gapHeight = rng.Next(minGapY, maxGapY + 1);
+                    int gapHalf = gapHeight / 2;
+                    int gapCenterY = rng.Next(_board.GameWindowTop + gapHalf, playBottom - gapHalf);
+
+                    _pillars.Add(new Pillar
                     {
-                        var gapTop = p.GapCenterY - (p.GapHeight / 2);
-                        var gapBottom = p.GapCenterY + (p.GapHeight / 2);
-                        var playTop = _board.MarginY + 1;
-                        _renderer.DrawPillars(_board, _pillars, scrollOffset);
-                        //Console.SetCursorPosition(screenX, Math.Max(playTop, gapTop - 1)); 
-                        //Console.Write("^");
-                    }
+                        WorldX = (int)nextSpawnWorldX,
+                        GapCenterY = gapCenterY,
+                        GapHeight = gapHeight
+                    });
+
+                    nextSpawnWorldX += rng.Next(24, 33);
                 }
-                //Console.SetCursorPosition(_board.Center.x, _board.Center.y+2);
-                //Console.Write($"World SC: {worldScrollCells} ");
+
+                // 4) draw (raz na klatkę świata)
+                _renderer.DrawPillars(_board, _pillars, scrollOffset);
             }
-            while(nextSpawnWorldX <= worldScrollCells + playRight)
-            {
-                int gapHeight = rng.Next(minGapY, maxGapY + 1);
-                int playTop = _board.MarginY + 1;
-                int playBottom = _board.WindowHeight - _board.MarginY - 1;
-                int gapHalf = gapHeight / 2;
-                int gapCenterY = rng.Next(gapHalf + playTop, playBottom - gapHalf);
-                _pillars.Add(new Pillar()
-                {
-                    WorldX = (int)nextSpawnWorldX,
-                    GapCenterY = gapCenterY,
-                    GapHeight = gapHeight
-                });
-                nextSpawnWorldX += rng.Next(24, 33);
-                if (_pillars.Count > 0)
-                {
-                    
-                    //Console.SetCursorPosition(2, _board.Center.y + 4);
-                    //Console.Write($"Pillars: {_pillars.Count}, last X={_pillars[^1].WorldX:F1}   "); 
-                }
-            }
-            
+
+
             if (_board.Collision)
             {
                 break;
