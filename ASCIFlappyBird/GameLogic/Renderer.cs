@@ -12,19 +12,17 @@ namespace ASCIFlappyBird.GameLogic
 
         public void DrawFrame(Board board)
         {
-            var boardWidth = board.WindowWidth - board.MarginX;
-            var boardHeight = board.WindowHeight - board.MarginY;
             TrySetCursorPosition(0, 0);
-                Console.Write(new string('#', boardWidth));
-            for (int y = 0; y <= boardHeight; y++)
+            Console.Write(new string('#', board.WindowWidth));
+            for (int y = 0; y <= board.BoardHeight; y++)
             {
                 TrySetCursorPosition(0, y);
                 Console.Write('#');
-                TrySetCursorPosition(boardWidth, y);
+                TrySetCursorPosition(board.BoardWidth, y);
                 Console.Write('#');
             }
-            TrySetCursorPosition(0, boardHeight);
-            Console.Write(new string('#', boardWidth));
+            TrySetCursorPosition(0, board.BoardHeight);
+            Console.Write(new string('#', board.BoardWidth));
         }
         public void DrawGameOver(int score)
         {
@@ -36,55 +34,46 @@ namespace ASCIFlappyBird.GameLogic
         }
         public void DrawPillars(Board board, List<Pillar> pillars, int scrollOffset)
         {
-            // Pole gry (spójne z DrawFrame)
-            int playLeft = 1;
-            int playRight = board.WindowWidth - board.MarginX - 1;
-            int playTop = 1;
-            int playBottom = board.WindowHeight - board.MarginY - 1;
-
-            const int pillarWidth = 2;
-
             foreach (var p in pillars)
             {
                 int screenX = p.WorldX - scrollOffset;
 
-                if (screenX > playRight || screenX + pillarWidth - 1 < playLeft)
+                if (screenX > board.GameWindowRight || screenX + p.Width - 1 < board.GameWindowLeft)
                     continue;
 
                 int gapTop = (int)Math.Floor(p.GapCenterY - p.GapHeight / 2.0);
                 int gapBottom = (int)Math.Ceiling(p.GapCenterY + p.GapHeight / 2.0);
 
-                gapTop = Math.Max(gapTop, playTop);
-                gapBottom = Math.Min(gapBottom, playBottom + 1);
+                gapTop = Math.Max(gapTop, board.GameWindowTop);
+                gapBottom = Math.Min(gapBottom, board.GameWindowBottom + 1);
 
-                for (int xCol = screenX; xCol < screenX + pillarWidth; xCol++)
+                for (int xCol = screenX; xCol < screenX + p.Width; xCol++)
                 {
-                    if (xCol < playLeft || xCol > playRight) continue;
+                    if (xCol < board.GameWindowLeft || xCol > board.GameWindowRight) continue;
 
-                    for (int y = playTop; y <= gapTop - 1; y++)
+                    for (int y = board.GameWindowTop; y <= gapTop - 1; y++)
                     {
                         if (TrySetCursorPosition(xCol, y)) Console.Write('|');
+                        if (TrySetCursorPosition(xCol + 2, y) && xCol < board.GameWindowRight - 1) Console.Write(' ');
                     }
-                    for (int y = gapBottom; y <= playBottom; y++)
+                    for (int y = gapBottom; y <= board.GameWindowBottom; y++)
                     {
                         if (TrySetCursorPosition(xCol, y)) Console.Write('|');
+                        if (TrySetCursorPosition(xCol + 2, y) && xCol < board.GameWindowRight - 1) Console.Write(' ');
                     }
+                }
+                if (TrySetCursorPosition(board.GameWindowLeft, board.GameWindowTop) && screenX - 1 < board.GameWindowLeft)
+                {
 
-                    int colHeight = playBottom - playTop + 1;
-                    for (int y = playTop; y <= playBottom; y++)
-                    {
-                        if (TrySetCursorPosition(xCol+2, y) && xCol < playRight-1) Console.Write(' ');
-                        if (TrySetCursorPosition(xCol , y) && xCol-1 < playLeft) Console.Write(new string(' ',pillarWidth));
-                    }
-
+                    for (int y = board.GameWindowTop; y <= board.GameWindowBottom; y++)
+                        Console.Write(new string(' ', board.WindowWidth));
                 }
             }
         }
-
         public bool TrySetCursorPosition(int x, int y)
         {
             if (x >= 0 && x < Console.BufferWidth && y >= 0 && y < Console.BufferHeight)
-            {                
+            {
                 Console.SetCursorPosition(x, y);
                 return true;
             }
@@ -93,3 +82,8 @@ namespace ASCIFlappyBird.GameLogic
         }
     }
 }
+/*                    for (int y = board.GameWindowTop; y <= board.GameWindowBottom; y++)
+                    {
+                        if (TrySetCursorPosition(xCol + 2, y) && xCol < board.GameWindowRight - 1) Console.Write(' ');
+                        if (TrySetCursorPosition(xCol, y) && xCol - 1 < board.GameWindowLeft) Console.Write(new string(' ', board.WindowWidth));
+                    }*/

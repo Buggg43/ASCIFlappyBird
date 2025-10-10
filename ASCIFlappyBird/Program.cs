@@ -1,4 +1,5 @@
-﻿using ASCIFlappyBird.GameLogic;
+﻿using ASCIFlappyBird.Config;
+using ASCIFlappyBird.GameLogic;
 using ASCIFlappyBird.Models;
 using ASCIFlappyBird.Services;
 using System.Diagnostics;
@@ -38,18 +39,13 @@ public class Program
         const int pillarWidth = 2;
         int minGapY = 5,maxGapY = 9;
         while (true)
-        {
-            var playLeft = _board.MarginX;
-            var playRight = _board.WindowWidth - _board.MarginX - 1;
-            var playWidth = playRight - playLeft;
-
-            
+        {   
             _board.WindowChanged(_board);
             if (_board.WindowResized)
             {
                 _board.WindowResized = false;
                 _renderer.DrawFrame(_board);
-                var birdX = (int)Math.Round(playLeft + 0.25 * playWidth);
+                var birdX = (int)Math.Round(_board.GameWindowLeft + 0.25 * _board.GameWindowWidth);
                 var scrollOffset = (int)Math.Floor(worldScrollCells);
                 _bird.VerticalPosition = _board.Center.y;
                 _bird.Position = (birdX, _board.Center.y);
@@ -81,12 +77,10 @@ public class Program
             while (worldAccumulatorMs >= WorldDtMs)
             {
                 worldAccumulatorMs -= WorldDtMs;
-
-                // 1) scroll
                 worldScrollCells += worldSpeedCellsPerSecond * (WorldDtMs / 1000.0);
                 var scrollOffset = (int)Math.Floor(worldScrollCells);
 
-                int removedCount = _pillars.RemoveAll(p => p.WorldX + pillarWidth - 1 < scrollOffset + /* playLeft = */ 1);
+                int removedCount = _pillars.RemoveAll(p => p.WorldX + p.Width - 1 < scrollOffset + _board.GameWindowLeft);
 
                 if (_pillars.Count < 5) removedCount ++;
 
@@ -94,7 +88,7 @@ public class Program
                 {
                     int gapHeight = rng.Next(minGapY, maxGapY + 1);
                     int gapHalf = gapHeight / 2;
-                    int gapCenterY = rng.Next(_board.GameWindowTop + gapHalf, playBottom - gapHalf);
+                    int gapCenterY = rng.Next(_board.GameWindowTop + gapHalf, _board.GameWindowBottom - gapHalf);
 
                     _pillars.Add(new Pillar
                     {
@@ -105,8 +99,6 @@ public class Program
 
                     nextSpawnWorldX += rng.Next(24, 33);
                 }
-
-                // 4) draw (raz na klatkę świata)
                 _renderer.DrawPillars(_board, _pillars, scrollOffset);
             }
 

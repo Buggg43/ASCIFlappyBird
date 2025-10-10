@@ -27,8 +27,8 @@ namespace ASCIFlappyBird.Services
             bird.VerticalPosition += bird.VerticalSpeed * deltaTimeSeconds;
 
             double halfH = bird.Height / 2.0;
-            double bottom = board.WindowHeight - board.MarginY - 1 - halfH;
-            double top = board.MarginY + 1 + halfH;
+            double bottom = board.GameWindowBottom - halfH;
+            double top = board.GameWindowTop + halfH;
 
             bird.VerticalPosition = Math.Clamp(bird.VerticalPosition, top, bottom);
             if(bird.VerticalPosition == top || bird.VerticalPosition == bottom)

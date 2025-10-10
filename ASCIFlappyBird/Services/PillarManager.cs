@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ASCIFlappyBird.GameLogic
+namespace ASCIFlappyBird.Services
 {
-    internal class Input
+    internal class PillarManager
     {
     }
 }

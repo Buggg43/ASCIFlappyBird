@@ -23,7 +23,7 @@ namespace ASCIFlappyBird.Models
         public int GameWindowTop => 1;
         public int GameWindowBottom => BoardHeight - 1;
         public int GameWindowWidth => GameWindowRight - GameWindowLeft;
-        public int GamwWindowHeight => GameWindowBottom - GameWindowTop;
+        public int GameWindowHeight => GameWindowBottom - GameWindowTop;
         
         public (int x, int y) Center => (WindowWidth / 2, WindowHeight / 2);
 
