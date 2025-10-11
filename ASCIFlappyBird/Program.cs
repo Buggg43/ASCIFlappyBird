@@ -26,18 +26,18 @@ public class Program
         double nextSpawnWorldX = 0;
 
         double worldAccumulatorMs = 0;
-        const double WorldDtMs = 16;
         double worldScrollCells = 0;
         double worldSpeedCellsPerSecond = 8;
         bool spawnPrimed = false;
 
-
+        int count = 0;
 
         double birdAccumulatorMs = 0;
         const double BirdDtMs = 16;
         int score = 0;
         const int pillarWidth = 2;
         int minGapY = 5,maxGapY = 9;
+        int lastScrollOffset = -1;
         while (true)
         {   
             _board.WindowChanged(_board);
@@ -74,13 +74,15 @@ public class Program
                 }
                 _birdService.ApplyGravity(_bird, _board, BirdDtMs / 1000.0);
             }
-            while (worldAccumulatorMs >= WorldDtMs)
+            while (worldAccumulatorMs >= GameConfig.WorldDtMs)
             {
-                worldAccumulatorMs -= WorldDtMs;
-                worldScrollCells += worldSpeedCellsPerSecond * (WorldDtMs / 1000.0);
+                worldAccumulatorMs -= GameConfig.WorldDtMs;
+                worldScrollCells += worldSpeedCellsPerSecond * (GameConfig.WorldDtMs / 1000.0);
                 var scrollOffset = (int)Math.Floor(worldScrollCells);
-
-                int removedCount = _pillars.RemoveAll(p => p.WorldX + p.Width - 1 < scrollOffset + _board.GameWindowLeft);
+                if (lastScrollOffset == scrollOffset) continue;
+                
+                lastScrollOffset = scrollOffset;
+                int removedCount = _pillars.RemoveAll(p => p.WorldX + p.Width - 1  < scrollOffset + _board.GameWindowLeft);
 
                 if (_pillars.Count < 5) removedCount ++;
 
@@ -100,16 +102,16 @@ public class Program
                     nextSpawnWorldX += rng.Next(24, 33);
                 }
                 _renderer.DrawPillars(_board, _pillars, scrollOffset);
-            }
+                _renderer.RemovePillar(_board, _pillars, scrollOffset, ref count);
+                }
 
-
-            if (_board.Collision)
-            {
-                break;
-            }
+                if (_board.Collision)
+                {
+                    break;
+                }
             
-            Thread.Sleep(50);
-        }
+                Thread.Sleep(50);
+            }
     }
 }
 

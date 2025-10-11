@@ -9,8 +9,8 @@ namespace ASCIFlappyBird.Config
     public sealed class GameConfig
     {
         // Clocks
-        public const int BirdDtMs = 16;
-        public const int WorldDtMs = 16;
+        public const int BirdDtMs = 6;
+        public const int WorldDtMs = 6;
 
         // Physics
         public const double GravityAcceleration = 5.0;
