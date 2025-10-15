@@ -13,17 +13,21 @@ namespace ASCIFlappyBird.GameLogic
 
         public void DrawFrame(Board board)
         {
+            Console.BackgroundColor = ConsoleColor.DarkRed;
             TrySetCursorPosition(0, 0);
-            Console.Write(new string('#', board.WindowWidth));
+            Console.Write(new string(' ', board.WindowWidth));
             for (int y = 0; y <= board.BoardHeight; y++)
             {
                 TrySetCursorPosition(0, y);
-                Console.Write('#');
+                
+                Console.Write(' ');
                 TrySetCursorPosition(board.BoardWidth, y);
-                Console.Write('#');
+                Console.Write(' ');
             }
+            
             TrySetCursorPosition(0, board.BoardHeight);
-            Console.Write(new string('#', board.BoardWidth));
+            Console.Write(new string(' ', board.BoardWidth));
+            Console.ResetColor();
         }
         public void DrawGameOver(int score)
         {
@@ -55,12 +59,16 @@ namespace ASCIFlappyBird.GameLogic
 
                     for (int y = board.GameWindowTop; y <= gapTop - 1; y++)
                     {
-                        if (TrySetCursorPosition(xCol, y)) Console.Write('|');
-                        if (TrySetCursorPosition(xCol + 2, y) && xCol < board.GameWindowRight - 1) Console.Write(' ');
+                        if (TrySetCursorPosition(xCol, y))
+                        {
+                            Console.Write("|"+"\x1b[32m");
+                           
+                        }
+                        if (TrySetCursorPosition(xCol + 2, y) && xCol < board.GameWindowRight - 1) Console.Write(" ");
                     }
                     for (int y = gapBottom; y <= board.GameWindowBottom; y++)
                     {
-                        if (TrySetCursorPosition(xCol, y)) Console.Write('|');
+                        if (TrySetCursorPosition(xCol, y)) Console.Write('|'+ "\x1b[32m");
                         if (TrySetCursorPosition(xCol + 2, y) && xCol < board.GameWindowRight - 1) Console.Write(' ');
                     }
                 }
@@ -82,6 +90,22 @@ namespace ASCIFlappyBird.GameLogic
                 Console.Write(count);
             }
         }
+        public void DrawBird(Bird Bird)
+        {
+            string sprite = Bird.VerticalSpeed switch
+            {
+                < -1 => "<('^)", // UP
+                > 1 => "<('_)",  // down
+                _ => "<(')>",    // equil.
+            };
+            TrySetCursorPosition(Bird.Position.x - Bird.Width, Bird.Position.y);
+            Console.Write(sprite);
+        }
+        public void RemoveBird(Bird bird, (int x, int y)lastPosition)
+        {
+            TrySetCursorPosition(lastPosition.x, lastPosition.y);
+            Console.Write(new string(' ',bird.Width));
+        }
         public bool TrySetCursorPosition(int x, int y)
         {
             if (x >= 0 && x < Console.BufferWidth && y >= 0 && y < Console.BufferHeight)
@@ -89,7 +113,6 @@ namespace ASCIFlappyBird.GameLogic
                 Console.SetCursorPosition(x, y);
                 return true;
             }
-
             return false;
         }
     }

@@ -13,7 +13,7 @@ namespace ASCIFlappyBird.Models
         public double VerticalPosition { get; set; }
         public double VerticalSpeed { get; set; }
         public double JumpStrength { get; set; } = 6.0;
-        public int Width { get; set; }
+        public int Width { get; set; } =  5; 
         public int Height { get; set; }
         public double InitialJumpSpeedPerSecond => Math.Sqrt(2 * GravityAcceleration * JumpStrength);
     }
