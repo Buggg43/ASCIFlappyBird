@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace ASCIFlappyBird.GameLogic
             
             TrySetCursorPosition(0, board.BoardHeight);
             Console.Write(new string(' ', board.BoardWidth));
-            Console.ResetColor();
+            Thread.Sleep(1000);
         }
         public void DrawGameOver(int score)
         {
@@ -83,9 +84,7 @@ namespace ASCIFlappyBird.GameLogic
                 for (int y = board.GameWindowTop; y <= board.BoardHeight - 1; y++)
                 {
                     if (TrySetCursorPosition(screenX + 1, y) && screenX < board.GameWindowRight - 1) Console.Write(new string(' ', pilarToRemove.Width));
-                    
                 }
-                
                 count++;
                 Console.Write(count);
             }
@@ -103,8 +102,11 @@ namespace ASCIFlappyBird.GameLogic
         }
         public void RemoveBird(Bird bird, (int x, int y)lastPosition)
         {
-            TrySetCursorPosition(lastPosition.x, lastPosition.y);
-            Console.Write(new string(' ',bird.Width));
+            if(lastPosition.x>1)
+            {
+                TrySetCursorPosition(lastPosition.x, lastPosition.y);
+                Console.Write(new string(' ', bird.Width));
+            }
         }
         public bool TrySetCursorPosition(int x, int y)
         {

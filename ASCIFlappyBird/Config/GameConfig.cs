@@ -21,6 +21,9 @@ namespace ASCIFlappyBird.Config
         public const int MaxGapY = 9;
         public const int MinSpacing = 24; 
         public const int MaxSpacing = 33;
-        public const double FirstSpawnFraction = 0.75; 
+        public const double FirstSpawnFraction = 0.75;
+
+        // Score
+        public const int Score = 0 ;
     }
 }
