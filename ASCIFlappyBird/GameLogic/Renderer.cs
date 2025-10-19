@@ -117,5 +117,49 @@ namespace ASCIFlappyBird.GameLogic
             }
             return false;
         }
+        public void DrawMenu(Board board)
+        {
+            var menuStartX = (int)Math.Round(board.Center.x * 0.50);
+            var menuEndX = (int)Math.Round(board.Center.x * 1.50);
+
+            var menuStartY = (int)Math.Round(board.Center.y * 0.25);
+            var menuEndY = (int)Math.Round(board.Center.y * 1.75);
+
+            var menuLength = menuEndX - menuStartX;
+
+            TrySetCursorPosition(menuStartX, menuStartY);
+            Console.Write(new string('#', menuLength));
+            for(int i=menuStartY; i < menuEndY; i++)
+            {
+                TrySetCursorPosition(menuStartX, i);
+                Console.Write("#");
+                TrySetCursorPosition(menuEndX, i);
+                Console.Write("#");
+            }
+            TrySetCursorPosition(menuStartX, menuEndY);
+            Console.Write(new string('#', menuLength));
+        }
+        public void DrawPause(Board board)
+        {
+            var menuStartX = (int)Math.Round(board.Center.x * 0.50);
+            var menuEndX = (int)Math.Round(board.Center.x * 1.50);
+
+            var menuStartY = (int)Math.Round(board.Center.y * 0.25);
+            var menuEndY = (int)Math.Round(board.Center.y * 1.75);
+
+            var menuLength = menuEndX - menuStartX;
+
+            TrySetCursorPosition(menuStartX, menuStartY);
+            Console.Write(new string('#', menuLength));
+            for (int i = menuStartY; i < menuEndY; i++)
+            {
+                TrySetCursorPosition(menuStartX, i);
+                Console.Write("#");
+                TrySetCursorPosition(menuEndX, i);
+                Console.Write("#");
+            }
+            TrySetCursorPosition(menuStartX, menuEndY);
+            Console.Write(new string('#', menuLength));
+        }
     }
 }

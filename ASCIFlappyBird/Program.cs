@@ -20,7 +20,6 @@ public class Program
             VerticalSpeed = 0,
             GravityAcceleration = 10,
         };
-        bool birdCentered = false;
         (int x, int y) birdLastPosition = (0,0);
         var sw = Stopwatch.StartNew();
         List<Pillar> _pillars = new List<Pillar>();
