@@ -20,7 +20,7 @@ public class Program
             VerticalSpeed = 0,
             GravityAcceleration = 10,
         };
-        (int x, int y) birdLastPosition = (0,0);
+        (int x, int y) birdLastPosition = (0, 0);
         var sw = Stopwatch.StartNew();
         List<Pillar> _pillars = new List<Pillar>();
         double nextSpawnWorldX = 0;
@@ -34,92 +34,99 @@ public class Program
 
         double birdAccumulatorMs = 0;
         const double BirdDtMs = 16;
-        int score = 0;
-        int minGapY = 5,maxGapY = 9;
+        int minGapY = 5, maxGapY = 9;
         int lastScrollOffset = -1;
         while (true)
-        {   
+        {
             _board.WindowChanged(_board);
             if (_board.WindowResized)
             {
                 _board.WindowResized = false;
-                _renderer.DrawFrame(_board);
-                
-                var birdX = (int)Math.Round(_board.GameWindowLeft + 0.25 * _board.GameWindowWidth);
-                var scrollOffset = (int)Math.Floor(worldScrollCells);
-                _bird.VerticalPosition = _board.Center.y;
-                _bird.Position = (birdX, _board.Center.y);
-
-                if (!spawnPrimed)
+                if(!GameConfig.Paused)
                 {
-                    nextSpawnWorldX = scrollOffset + _board.FirstSpawnScreenX;
-                    spawnPrimed = true;
-                }
-                Console.ResetColor();
-            }
+                    _renderer.DrawFrame(_board);
+                    var birdX = (int)Math.Round(_board.GameWindowLeft + 0.25 * _board.GameWindowWidth);
+                    var scrollOffset = (int)Math.Floor(worldScrollCells);
+                    _bird.VerticalPosition = _board.Center.y;
+                    _bird.Position = (birdX, _board.Center.y);
 
-            var elapsedMs = sw.Elapsed.TotalMilliseconds;
-            sw.Restart();
-            birdAccumulatorMs += elapsedMs;
-            worldAccumulatorMs += elapsedMs;
-
-            while (worldAccumulatorMs >= GameConfig.WorldDtMs)
-            {
-                worldAccumulatorMs -= GameConfig.WorldDtMs;
-                worldScrollCells += worldSpeedCellsPerSecond * (GameConfig.WorldDtMs / 1000.0);
-                var scrollOffset = (int)Math.Floor(worldScrollCells);
-                if (lastScrollOffset == scrollOffset) continue;
-                
-                lastScrollOffset = scrollOffset;
-                int removedCount = _pillars.RemoveAll(p => p.WorldX + p.Width - 1  < scrollOffset + _board.GameWindowLeft);
-
-                if (_pillars.Count < 5) removedCount ++;
-
-                for (int i = 0; i < removedCount; i++)
-                {
-                    int gapHeight = rng.Next(minGapY, maxGapY + 1);
-                    int gapHalf = gapHeight / 2;
-                    int gapCenterY = rng.Next(_board.GameWindowTop + gapHalf, _board.GameWindowBottom - gapHalf);
-
-                    _pillars.Add(new Pillar
+                    if (!spawnPrimed)
                     {
-                        WorldX = (int)nextSpawnWorldX,
-                        GapCenterY = gapCenterY,
-                        GapHeight = gapHeight
-                    });
-
-                    nextSpawnWorldX += rng.Next(24, 33);
-                }
-                _renderer.DrawPillars(_board, _pillars, scrollOffset);
-                _renderer.RemovePillar(_board, _pillars, scrollOffset, ref count);
-            }
-
-
-            while (birdAccumulatorMs >= BirdDtMs)
-            {
-                birdAccumulatorMs -= BirdDtMs;
-                if (Console.KeyAvailable)
-                {
-                    var keyInfo = Console.ReadKey(true);
-                    if (keyInfo.Key == ConsoleKey.Spacebar)
-                    {
-                        _birdService.MoveBird(_bird);
+                        nextSpawnWorldX = scrollOffset + _board.FirstSpawnScreenX;
+                        spawnPrimed = true;
                     }
+                        Console.ResetColor();
                 }
-                _birdService.ApplyGravity(_bird, _board, BirdDtMs / 1000.0);
-                if (_bird.Position != birdLastPosition)
+            }
+            if (!GameConfig.Paused)
+            { 
+                var elapsedMs = sw.Elapsed.TotalMilliseconds;
+                sw.Restart();
+                birdAccumulatorMs += elapsedMs;
+                worldAccumulatorMs += elapsedMs;
+
+                while (worldAccumulatorMs >= GameConfig.WorldDtMs)
                 {
-                    _renderer.RemoveBird(_bird, birdLastPosition);
-                    birdLastPosition = (_bird.Position.x - _bird.Width, (int)Math.Round(_bird.VerticalPosition));
+                    worldAccumulatorMs -= GameConfig.WorldDtMs;
+                    worldScrollCells += worldSpeedCellsPerSecond * (GameConfig.WorldDtMs / 1000.0);
+                    var scrollOffset = (int)Math.Floor(worldScrollCells);
+                    if (lastScrollOffset == scrollOffset) continue;
+
+                    lastScrollOffset = scrollOffset;
+                    int removedCount = _pillars.RemoveAll(p => p.WorldX + p.Width - 1 < scrollOffset + _board.GameWindowLeft);
+
+                    if (_pillars.Count < 5) removedCount++;
+
+                    for (int i = 0; i < removedCount; i++)
+                    {
+                        int gapHeight = rng.Next(minGapY, maxGapY + 1);
+                        int gapHalf = gapHeight / 2;
+                        int gapCenterY = rng.Next(_board.GameWindowTop + gapHalf, _board.GameWindowBottom - gapHalf);
+
+                        _pillars.Add(new Pillar
+                        {
+                            WorldX = (int)nextSpawnWorldX,
+                            GapCenterY = gapCenterY,
+                            GapHeight = gapHeight
+                        });
+
+                        nextSpawnWorldX += rng.Next(24, 33);
+                    }
+                    _renderer.DrawPillars(_board, _pillars, scrollOffset);
+                    _renderer.RemovePillar(_board, _pillars, scrollOffset, ref count);
                 }
-                if (_bird.Position != birdLastPosition) _renderer.DrawBird(_bird);
-                
+
+
+                while (birdAccumulatorMs >= BirdDtMs)
+                {
+                    birdAccumulatorMs -= BirdDtMs;
+                    if (Console.KeyAvailable)
+                    {
+                        var keyInfo = Console.ReadKey(true);
+                        if (keyInfo.Key == ConsoleKey.Spacebar)
+                        {
+                            _birdService.MoveBird(_bird);
+                        }
+                    }
+                    _birdService.ApplyGravity(_bird, _board, BirdDtMs / 1000.0);
+                    if (_bird.Position != birdLastPosition)
+                    {
+                        _renderer.RemoveBird(_bird, birdLastPosition);
+                        birdLastPosition = (_bird.Position.x - _bird.Width, (int)Math.Round(_bird.VerticalPosition));
+                    }
+                    if (_bird.Position != birdLastPosition) _renderer.DrawBird(_bird);
+
+                }
+                if (_board.Collision)
+                {
+                    break;
+                }
+                Thread.Sleep(50);
             }
-            if (_board.Collision)
+            else
             {
-                break;
+                _renderer.DrawMenu(_board);
             }
-            Thread.Sleep(50);
         }
     }
 }

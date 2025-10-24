@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,5 +26,15 @@ namespace ASCIFlappyBird.Config
 
         // Score
         public const int Score = 0 ;
+
+        //
+        public const bool Paused = true;
+
+        public static readonly ConsoleColor[] Colors = new[]{
+            ConsoleColor.Red, ConsoleColor.Yellow, ConsoleColor.Green,
+            ConsoleColor.Cyan, ConsoleColor.Blue, ConsoleColor.Magenta
+        };
+
+        public static int ColorOffSet = 0;
     }
 }
