@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ASCIFlappyBird.Models;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace ASCIFlappyBird.Config
         // Clocks
         public const int BirdDtMs = 6;
         public const int WorldDtMs = 6;
+        public static readonly object consoleLock = new();
+
 
         // Physics
         public const double GravityAcceleration = 5.0;
@@ -27,14 +30,17 @@ namespace ASCIFlappyBird.Config
         // Score
         public const int Score = 0 ;
 
-        //
-        public const bool Paused = true;
-
+        // GameState
+        public static volatile bool Paused = false;
+        public static volatile bool ShowMenu = true;
+        
+        // Apparence
         public static readonly ConsoleColor[] Colors = new[]{
             ConsoleColor.Red, ConsoleColor.Yellow, ConsoleColor.Green,
             ConsoleColor.Cyan, ConsoleColor.Blue, ConsoleColor.Magenta
         };
-
         public static int ColorOffSet = 0;
+        // ????????????????????????   
+        //public static readonly List<Menu> MenuOptions = new List<Menu> { };
     }
 }

@@ -122,11 +122,11 @@ namespace ASCIFlappyBird.GameLogic
         }
         public void DrawMenu(Board board)
         {
-            var menuStartX = (int)Math.Round(board.Center.x * 0.50f);
-            var menuEndX = (int)Math.Round(board.Center.x * 1.50f);
+            var menuStartX = (int)Math.Round(board.Center.x - 20.0f);
+            var menuEndX = (int)Math.Round(board.Center.x + 20.0f);
 
-            var menuStartY = (int)Math.Round(board.Center.y * 0.35f);
-            var menuEndY = (int)Math.Round(board.Center.y * 1.5f);
+            var menuStartY = (int)Math.Round(board.Center.y - 10.0f);
+            var menuEndY = (int)Math.Round(board.Center.y + 10.0f);
 
             var menuLength = menuEndX - menuStartX;
 
@@ -146,6 +146,9 @@ namespace ASCIFlappyBird.GameLogic
             Console.BackgroundColor = GameConfig.Colors[collorToPick];
             TrySetCursorPosition(menuStartX, menuEndY);
             Console.Write(new string(' ', menuLength));
+
+            
+
             Console.ResetColor();
             GameConfig.ColorOffSet++;
             Thread.Sleep(120);
