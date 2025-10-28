@@ -1,13 +1,5 @@
 ﻿using ASCIFlappyBird.Config;
 using ASCIFlappyBird.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.Marshalling;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ASCIFlappyBird.GameLogic
 {
@@ -24,14 +16,15 @@ namespace ASCIFlappyBird.GameLogic
             for (int y = 0; y <= board.BoardHeight; y++)
             {
                 TrySetCursorPosition(0, y);
-                
+
                 Console.Write(' ');
                 TrySetCursorPosition(board.BoardWidth, y);
                 Console.Write(' ');
             }
-            
+
             TrySetCursorPosition(0, board.BoardHeight);
             Console.Write(new string(' ', board.BoardWidth));
+            Console.ResetColor();
             Thread.Sleep(1000);
         }
         public void DrawGameOver(int score)
@@ -49,7 +42,7 @@ namespace ASCIFlappyBird.GameLogic
             {
                 int screenX = p.WorldX - scrollOffset;
 
-                if (screenX > board.GameWindowRight || screenX + p.Width  < board.GameWindowLeft)
+                if (screenX > board.GameWindowRight || screenX + p.Width < board.GameWindowLeft)
                     continue;
 
                 int gapTop = (int)Math.Floor(p.GapCenterY - p.GapHeight / 2.0);
@@ -66,22 +59,22 @@ namespace ASCIFlappyBird.GameLogic
                     {
                         if (TrySetCursorPosition(xCol, y))
                         {
-                            Console.Write("|"+"\x1b[32m");
-                           
+                            Console.Write("|" + "\x1b[32m");
+
                         }
                         if (TrySetCursorPosition(xCol + 2, y) && xCol < board.GameWindowRight - 1) Console.Write(" ");
                     }
                     for (int y = gapBottom; y <= board.GameWindowBottom; y++)
                     {
-                        if (TrySetCursorPosition(xCol, y)) Console.Write('|'+ "\x1b[32m");
+                        if (TrySetCursorPosition(xCol, y)) Console.Write('|' + "\x1b[32m");
                         if (TrySetCursorPosition(xCol + 2, y) && xCol < board.GameWindowRight - 1) Console.Write(' ');
                     }
                 }
             }
         }
-        public void RemovePillar(Board board, List<Pillar> pillars, int scrollOffset,ref int count)
+        public void RemovePillar(Board board, List<Pillar> pillars, int scrollOffset, ref int count)
         {
-            var pilarToRemove = pillars.FirstOrDefault(p => p.WorldX - scrollOffset < board.GameWindowLeft);         
+            var pilarToRemove = pillars.FirstOrDefault(p => p.WorldX - scrollOffset < board.GameWindowLeft);
             if (pilarToRemove != null)
             {
                 var screenX = pilarToRemove.WorldX - scrollOffset;
@@ -103,9 +96,9 @@ namespace ASCIFlappyBird.GameLogic
             TrySetCursorPosition(Bird.Position.x - Bird.Width, Bird.Position.y);
             Console.Write(sprite);
         }
-        public void RemoveBird(Bird bird, (int x, int y)lastPosition)
+        public void RemoveBird(Bird bird, (int x, int y) lastPosition)
         {
-            if(lastPosition.x>1)
+            if (lastPosition.x > 1)
             {
                 TrySetCursorPosition(lastPosition.x, lastPosition.y);
                 Console.Write(new string(' ', bird.Width));
@@ -122,24 +115,24 @@ namespace ASCIFlappyBird.GameLogic
         }
         public void DrawMenu(Board board)
         {
-            var menuStartX = (int)Math.Round(board.Center.x - 20.0f);
-            var menuEndX = (int)Math.Round(board.Center.x + 20.0f);
+            var menuStartX = (int)Math.Round(board.Center.x - 21.0f);
+            var menuEndX = (int)Math.Round(board.Center.x + 21.0f);
 
-            var menuStartY = (int)Math.Round(board.Center.y - 10.0f);
-            var menuEndY = (int)Math.Round(board.Center.y + 10.0f);
+            var menuStartY = (int)Math.Round(board.Center.y - 11.0f);
+            var menuEndY = (int)Math.Round(board.Center.y + 11.0f);
 
             var menuLength = menuEndX - menuStartX;
 
             TrySetCursorPosition(menuStartX, menuStartY);
             Console.BackgroundColor = GameConfig.Colors[collorToPick];
             Console.Write(new string(' ', menuLength));
-            for(int i=menuStartY+1; i < menuEndY; i++)
+            for (int i = menuStartY + 1; i < menuEndY; i++)
             {
                 item++;
                 Console.BackgroundColor = GameConfig.Colors[collorToPick];
                 TrySetCursorPosition(menuStartX, i);
                 Console.Write("  ");
-                TrySetCursorPosition(menuEndX-2, i);
+                TrySetCursorPosition(menuEndX - 2, i);
                 Console.Write("  ");
             }
             item++;
@@ -147,7 +140,7 @@ namespace ASCIFlappyBird.GameLogic
             TrySetCursorPosition(menuStartX, menuEndY);
             Console.Write(new string(' ', menuLength));
 
-            
+
 
             Console.ResetColor();
             GameConfig.ColorOffSet++;
@@ -155,27 +148,27 @@ namespace ASCIFlappyBird.GameLogic
         }
         public void DrawPause(Board board)
         {
-            var menuStartX = (int)Math.Round(board.Center.x * 0.50f);
-            var menuEndX = (int)Math.Round(board.Center.x * 1.50f);
+            var pauseStartX = (int)Math.Round(board.Center.x - 21.0f);
+            var pauseEndX = (int)Math.Round(board.Center.x + 21.0f);
 
-            var menuStartY = (int)Math.Round(board.Center.y * 0.8f);
-            var menuEndY = (int)Math.Round(board.Center.y * 1.2f);
+            var pauseStartY = (int)Math.Round(board.Center.y - 2.0f);
+            var pauseEndY = (int)Math.Round(board.Center.y + 2.0f);
 
-            var menuLength = menuEndX - menuStartX;
+            var pauseLength = pauseEndX - pauseStartX + 1;
 
-            TrySetCursorPosition(menuStartX, menuStartY);
-            Console.Write(new string('#', menuLength));
-            for (int i = menuStartY; i < menuEndY; i++)
+            TrySetCursorPosition(pauseStartX, pauseStartY);
+            Console.Write(new string('#', pauseLength));
+            for (int i = pauseStartY + 1; i < pauseEndY; i++)
             {
-                TrySetCursorPosition(menuStartX, i);
-                Console.Write(new string(' ', menuLength));
-                TrySetCursorPosition(menuStartX, i);
+                TrySetCursorPosition(pauseStartX, i);
+                Console.Write(new string(' ', pauseLength));
+                TrySetCursorPosition(pauseStartX, i);
                 Console.Write("#");
-                TrySetCursorPosition(menuEndX, i);
+                TrySetCursorPosition(pauseEndX, i);
                 Console.Write("#");
             }
-            TrySetCursorPosition(menuStartX, menuEndY);
-            Console.Write(new string('#', menuLength));
+            TrySetCursorPosition(pauseStartX, pauseEndY);
+            Console.Write(new string('#', pauseLength));
 
 
             //PAUSE DRAW
