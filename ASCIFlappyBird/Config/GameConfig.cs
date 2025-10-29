@@ -36,7 +36,13 @@
             ConsoleColor.Cyan, ConsoleColor.Blue, ConsoleColor.Magenta
         };
         public static int ColorOffSet = 0;
-        // ????????????????????????   
-        //public static readonly List<Menu> MenuOptions = new List<Menu> { };
+        // Menu 
+        public static readonly List<string> MenuOptions = new List<string>{
+            "Start Game",
+            "Mute Game",
+            "Leader Board",
+            "Controls",
+            "Exit Game"
+        };
     }
 }

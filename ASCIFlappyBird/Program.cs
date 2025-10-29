@@ -41,7 +41,6 @@ public class Program
         Task.Run(() => InputService.InputListener(inputCts.Token));
         while (true)
         {
-
             _board.WindowChanged(_board);
             if (_board.WindowResized)
             {
@@ -89,7 +88,6 @@ public class Program
             {
                 if (!GameConfig.GameDrawn)
                 {
-
                     sw.Start();
                     Console.Clear();
                     _renderer.DrawFrame(_board);
@@ -151,15 +149,11 @@ public class Program
                         birdLastPosition = (_bird.Position.x - _bird.Width, (int)Math.Round(_bird.VerticalPosition));
                     }
                     if (_bird.Position != birdLastPosition) _renderer.DrawBird(_bird);
-
                 }
                 if (_board.Collision) break;
                 Thread.Sleep(50);
-
             }
-
         }
         inputCts.Cancel();
     }
 }
-

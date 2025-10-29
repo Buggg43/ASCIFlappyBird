@@ -118,8 +118,8 @@ namespace ASCIFlappyBird.GameLogic
             var menuStartX = (int)Math.Round(board.Center.x - 21.0f);
             var menuEndX = (int)Math.Round(board.Center.x + 21.0f);
 
-            var menuStartY = (int)Math.Round(board.Center.y - 11.0f);
-            var menuEndY = (int)Math.Round(board.Center.y + 11.0f);
+            var menuStartY = (int)Math.Round(board.Center.y - 9.0f);
+            var menuEndY = (int)Math.Round(board.Center.y + 9.0f);
 
             var menuLength = menuEndX - menuStartX;
 
@@ -128,10 +128,17 @@ namespace ASCIFlappyBird.GameLogic
             Console.Write(new string(' ', menuLength));
             for (int i = menuStartY + 1; i < menuEndY; i++)
             {
+
                 item++;
                 Console.BackgroundColor = GameConfig.Colors[collorToPick];
                 TrySetCursorPosition(menuStartX, i);
                 Console.Write("  ");
+                if (!GameConfig.MenuDrawn)
+                {
+                    Console.ResetColor();
+                    Console.Write(new string(' ', menuLength - 2));
+                    Console.BackgroundColor = GameConfig.Colors[collorToPick];
+                }
                 TrySetCursorPosition(menuEndX - 2, i);
                 Console.Write("  ");
             }
@@ -140,19 +147,39 @@ namespace ASCIFlappyBird.GameLogic
             TrySetCursorPosition(menuStartX, menuEndY);
             Console.Write(new string(' ', menuLength));
 
-
-
             Console.ResetColor();
+            if (!GameConfig.MenuDrawn || board.WindowResized)
+            {
+                GameConfig.MenuDrawn = true;
+                int menuOptionOffsetX = 6;
+                int menuOptionOffsetY = 3;
+                int menuOptionStartX = menuStartX + menuOptionOffsetX;
+                int menuOptionStartY = menuStartY + menuOptionOffsetY;
+
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                //centering text
+
+                int menuCenter = menuStartX + (menuLength / 2);
+                int startingTextPosition = 0;
+                foreach (var item in GameConfig.MenuOptions)
+                {
+                    startingTextPosition = menuCenter - (item.Length / 2);
+                    TrySetCursorPosition(startingTextPosition, menuOptionStartY);
+                    Console.Write(item);
+                    menuOptionStartY += menuOptionOffsetY;
+                }
+                //i know it's not correctly centered :(
+            }
             GameConfig.ColorOffSet++;
             Thread.Sleep(120);
         }
         public void DrawPause(Board board)
         {
-            var pauseStartX = (int)Math.Round(board.Center.x - 21.0f);
-            var pauseEndX = (int)Math.Round(board.Center.x + 21.0f);
+            var pauseStartX = (int)Math.Round(board.Center.x - 22.0f);
+            var pauseEndX = (int)Math.Round(board.Center.x + 22.0f);
 
-            var pauseStartY = (int)Math.Round(board.Center.y - 2.0f);
-            var pauseEndY = (int)Math.Round(board.Center.y + 2.0f);
+            var pauseStartY = (int)Math.Round(board.Center.y - 2.5f);
+            var pauseEndY = (int)Math.Round(board.Center.y + 2.5f);
 
             var pauseLength = pauseEndX - pauseStartX + 1;
 

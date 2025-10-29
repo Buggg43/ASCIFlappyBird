@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ASCIFlappyBird.Models
+﻿namespace ASCIFlappyBird.Models
 {
     public class Board
     {
@@ -24,7 +17,7 @@ namespace ASCIFlappyBird.Models
         public int GameWindowBottom => BoardHeight - 1;
         public int GameWindowWidth => GameWindowRight - GameWindowLeft;
         public int GameWindowHeight => GameWindowBottom - GameWindowTop;
-        
+
         public (int x, int y) Center => (WindowWidth / 2, WindowHeight / 2);
 
         public int FirstSpawnScreenX => GameWindowLeft + (int)Math.Round(GameWindowWidth * 0.75);

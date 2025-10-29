@@ -6,6 +6,5 @@
         public int GapHeight { get; set; }
         public int GapCenterY { get; set; }
         public int Width { get; set; } = 2;
-
     }
 }
