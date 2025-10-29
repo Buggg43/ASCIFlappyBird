@@ -15,6 +15,16 @@ namespace ASCIFlappyBird.Services
                         GameConfig.Paused = !GameConfig.Paused;
                     if (k.Key == ConsoleKey.Escape)
                         GameConfig.ShowMenu = !GameConfig.ShowMenu;
+                    if (k.Key == ConsoleKey.UpArrow && GameConfig.ShowMenu == true)
+                    {
+                        GameConfig.SelectedMenu--;
+                        GameConfig.UpdateCursor = true;
+                    }
+                    if (k.Key == ConsoleKey.DownArrow && GameConfig.ShowMenu == true)
+                    {
+                        GameConfig.SelectedMenu++;
+                        GameConfig.UpdateCursor = true;
+                    }
                 }
                 Thread.Sleep(20);
             }

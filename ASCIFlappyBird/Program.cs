@@ -10,6 +10,7 @@ public class Program
     {
         Console.Title = "ASCII Flappy Bird";
         Console.CursorVisible = false;
+        SoundPlayerService soundPlayer = new SoundPlayerService();
         Random rng = new Random();
         BirdService _birdService = new BirdService();
         Renderer _renderer = new Renderer();
@@ -64,9 +65,11 @@ public class Program
             {
                 if (!GameConfig.MenuDrawn)
                 {
+                    soundPlayer.Dispose();
                     sw.Stop();
                     GameConfig.GameDrawn = false;
                     Console.Clear();
+                    soundPlayer.Play();
                 }
                 lock (GameConfig.consoleLock)
                 {
@@ -88,12 +91,14 @@ public class Program
             {
                 if (!GameConfig.GameDrawn)
                 {
+                    soundPlayer.Dispose();
                     sw.Start();
                     Console.Clear();
                     _renderer.DrawFrame(_board);
                     GameConfig.GameDrawn = true;
                     GameConfig.PauseDrawn = false;
                     GameConfig.MenuDrawn = false;
+                    soundPlayer.Play();
                 }
 
                 var elapsedMs = sw.Elapsed.TotalMilliseconds;
@@ -150,10 +155,11 @@ public class Program
                     }
                     if (_bird.Position != birdLastPosition) _renderer.DrawBird(_bird);
                 }
-                if (_board.Collision) break;
-                Thread.Sleep(50);
+
             }
+            if (_board.Collision) break;
         }
         inputCts.Cancel();
+        soundPlayer.Dispose();
     }
 }

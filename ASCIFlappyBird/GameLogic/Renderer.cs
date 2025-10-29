@@ -147,14 +147,15 @@ namespace ASCIFlappyBird.GameLogic
             TrySetCursorPosition(menuStartX, menuEndY);
             Console.Write(new string(' ', menuLength));
 
-            Console.ResetColor();
+
             if (!GameConfig.MenuDrawn || board.WindowResized)
             {
-                GameConfig.MenuDrawn = true;
                 int menuOptionOffsetX = 6;
                 int menuOptionOffsetY = 3;
                 int menuOptionStartX = menuStartX + menuOptionOffsetX;
                 int menuOptionStartY = menuStartY + menuOptionOffsetY;
+                Console.ResetColor();
+                GameConfig.MenuDrawn = true;
 
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 //centering text
@@ -170,6 +171,30 @@ namespace ASCIFlappyBird.GameLogic
                 }
                 //i know it's not correctly centered :(
             }
+            if (GameConfig.UpdateCursor || board.WindowResized)
+            {
+                int menuOptionOffsetX = 6;
+                int menuOptionOffsetY = 3;
+                int menuOptionStartX = menuStartX + menuOptionOffsetX;
+                int menuOptionStartY = menuStartY + menuOptionOffsetY;
+                Console.ResetColor();
+                GameConfig.UpdateCursor = false;
+                menuOptionStartY = menuStartY + menuOptionOffsetY;
+
+                TrySetCursorPosition(menuOptionStartX + menuOptionOffsetX, menuOptionStartY + (menuOptionOffsetY * GameConfig.SelectedMenu) + 1);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write(new string('-', menuLength - (menuOptionOffsetX * 4)));
+
+                Console.ResetColor();
+
+                if (GameConfig.PrevSelectedMenu != GameConfig.SelectedMenu)
+                {
+                    TrySetCursorPosition(menuOptionStartX + menuOptionOffsetX, menuOptionStartY + (menuOptionOffsetY * GameConfig.PrevSelectedMenu) + 1);
+                    Console.Write(new string(' ', menuLength - (menuOptionOffsetX * 4)));
+                    GameConfig.PrevSelectedMenu = GameConfig.SelectedMenu;
+                }
+            }
+            Console.ResetColor();
             GameConfig.ColorOffSet++;
             Thread.Sleep(120);
         }
