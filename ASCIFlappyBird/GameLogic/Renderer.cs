@@ -227,5 +227,32 @@ namespace ASCIFlappyBird.GameLogic
             TrySetCursorPosition(board.Center.x - 3, board.Center.y);
             Console.Write("PAUSED");
         }
+        public void DrawSoundPanel(Board board)
+        {
+            string menuTitle = "Sound Panel";
+            TrySetCursorPosition(board.Center.x - (menuTitle.Length / 2), board.Center.y - 2);
+            Console.Write(menuTitle);
+
+            int progresBarStartX = board.Center.x - 50;
+            int progres = Convert.ToInt32(GameConfig.CurentVolume * 100);
+            DrawProgresBar((progresBarStartX, board.Center.y), progres, 100);
+        }
+        public void DrawProgresBar((int x, int y) progresBarPosition, int progres, int progresBarLength)
+        {
+
+            TrySetCursorPosition(progresBarPosition.x - 5, progresBarPosition.y);
+            Console.Write($"{progres}% [");
+            TrySetCursorPosition(progresBarPosition.x + progresBarLength + 1, progresBarPosition.y);
+            Console.Write("]");
+            Console.ForegroundColor = ConsoleColor.Red;
+            int progresLength = progresBarPosition.x + progres;
+            for (int i = progresBarPosition.x; i <= progresLength; i++)
+            {
+                TrySetCursorPosition(i, progresBarPosition.y);
+                Console.Write("\u25A0");
+            }
+
+            Console.ResetColor();
+        }
     }
 }

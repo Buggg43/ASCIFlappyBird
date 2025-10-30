@@ -20,10 +20,23 @@ namespace ASCIFlappyBird.Services
                         GameConfig.SelectedMenu--;
                         GameConfig.UpdateCursor = true;
                     }
-                    if (k.Key == ConsoleKey.DownArrow && GameConfig.ShowMenu == true)
+                    else if (k.Key == ConsoleKey.DownArrow && GameConfig.ShowMenu == true)
                     {
                         GameConfig.SelectedMenu++;
                         GameConfig.UpdateCursor = true;
+                    }
+                    if (k.Key == ConsoleKey.Enter && GameConfig.ShowMenu == true)
+                    {
+                        GameConfig.SelectedMenu++;
+                        GameConfig.ShowMenu = false;
+                    }
+                    if (k.Key == ConsoleKey.RightArrow && GameConfig.ShowSoundPanel == true)
+                    {
+                        GameConfig.CurentVolume += 0.01f;
+                    }
+                    else if (k.Key == ConsoleKey.LeftArrow && GameConfig.ShowSoundPanel == true)
+                    {
+                        GameConfig.CurentVolume -= 0.01f;
                     }
                 }
                 Thread.Sleep(20);

@@ -29,6 +29,7 @@
         public static volatile bool GameDrawn = false;
         public static volatile bool PauseDrawn = false;
         public static volatile bool MenuDrawn = false;
+        public static volatile bool ShowSoundPanel = false;
 
         // Apparence
         public static readonly ConsoleColor[] Colors = new[]{
@@ -39,7 +40,7 @@
         // Menu 
         public static readonly List<string> MenuOptions = new List<string>{
             "Start Game",
-            "Mute Game",
+            "Sound Panel",
             "Leader Board",
             "Controls",
             "Exit Game"
@@ -52,5 +53,8 @@
         }
         public static int PrevSelectedMenu;
         public static volatile bool UpdateCursor = true;
+        public static volatile float CurentVolume = 0.2f;
+
+
     }
 }
