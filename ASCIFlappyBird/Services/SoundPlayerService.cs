@@ -22,7 +22,7 @@ namespace ASCIFlappyBird.Services
 
                 _audioFile = new AudioFileReader(gameMusic);
                 _volumeProvider = new VolumeSampleProvider(_audioFile.ToSampleProvider());
-                _volumeProvider.Volume = 0.05f;
+                _volumeProvider.Volume = GameConfig.CurentVolume;
                 _outputDevice.Init(_volumeProvider.ToWaveProvider());
                 _outputDevice.Play();
             }
@@ -30,7 +30,7 @@ namespace ASCIFlappyBird.Services
             {
                 _audioFile = new AudioFileReader(menuMusic);
                 _volumeProvider = new VolumeSampleProvider(_audioFile.ToSampleProvider());
-                _volumeProvider.Volume = 0.05f;
+                _volumeProvider.Volume = GameConfig.CurentVolume;
                 _outputDevice.Init(_volumeProvider.ToWaveProvider());
                 _outputDevice.Play();
             }

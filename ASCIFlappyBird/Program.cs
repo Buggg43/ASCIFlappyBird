@@ -36,11 +36,11 @@ public class Program
         const double BirdDtMs = 16;
         int minGapY = 5, maxGapY = 9;
         int lastScrollOffset = -1;
-
+        float oldSoundValue = 0.0f;
         // Game Loop
         CancellationTokenSource inputCts = new CancellationTokenSource();
         Task.Run(() => InputService.InputListener(inputCts.Token));
-        while (true)
+        while (!GameConfig.ExitGame)
         {
             _board.WindowChanged(_board);
             if (_board.WindowResized)
@@ -87,7 +87,7 @@ public class Program
                     GameConfig.PauseDrawn = true;
                 }
             }
-            else if (!GameConfig.Paused && !GameConfig.ShowMenu)
+            else if (GameConfig.ShowGame)
             {
                 if (!GameConfig.GameDrawn)
                 {
@@ -157,8 +157,21 @@ public class Program
                 }
 
             }
+            else if (GameConfig.ShowAbout)
+            {
+                _renderer.DrawAbout(_board);
+            }
+            else if (GameConfig.ShowSoundPanel)
+            {
+                if (oldSoundValue != GameConfig.CurentVolume)
+                {
+                    oldSoundValue = GameConfig.CurentVolume;
+                    _renderer.DrawSoundPanel(_board);
+                }
+            }
             if (_board.Collision) break;
         }
+        Console.Clear();
         inputCts.Cancel();
         soundPlayer.Dispose();
     }

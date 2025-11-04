@@ -23,14 +23,18 @@
         public const int Score = 0;
 
         // GameState
+        public static volatile bool ExitGame = false;
         public static volatile bool Paused = false;
-        public static volatile bool ShowMenu = true;
-        public static volatile bool ShowGame = false;
+
+
         public static volatile bool GameDrawn = false;
         public static volatile bool PauseDrawn = false;
         public static volatile bool MenuDrawn = false;
         public static volatile bool ShowSoundPanel = false;
 
+        public static volatile bool ShowGame = false;
+        public static volatile bool ShowMenu = true;
+        public static volatile bool ShowAbout = false;
         // Apparence
         public static readonly ConsoleColor[] Colors = new[]{
             ConsoleColor.Red, ConsoleColor.Yellow, ConsoleColor.Green,

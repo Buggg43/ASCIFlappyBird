@@ -254,5 +254,9 @@ namespace ASCIFlappyBird.GameLogic
 
             Console.ResetColor();
         }
+        public void DrawAbout(Board board)
+        {
+
+        }
     }
 }
