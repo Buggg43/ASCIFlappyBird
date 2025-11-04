@@ -58,13 +58,38 @@ namespace ASCIFlappyBird.Services
                                 break;
                         }
                     }
-                    if (k.Key == ConsoleKey.RightArrow && GameConfig.ShowSoundPanel == true)
+                    if (k.Key == ConsoleKey.RightArrow && GameConfig.ShowSoundPanel)
                     {
-                        GameConfig.CurentVolume += 0.01f;
+                        lock (GameConfig.audioLock)
+                        {
+                            GameConfig.CurentVolume = Math.Clamp(GameConfig.CurentVolume + 0.01f, 0f, 1f);
+                            if (GameConfig.Muted && GameConfig.CurentVolume > 0f) GameConfig.Muted = false;
+                        }
                     }
-                    else if (k.Key == ConsoleKey.LeftArrow && GameConfig.ShowSoundPanel == true)
+                    else if (k.Key == ConsoleKey.LeftArrow && GameConfig.ShowSoundPanel)
                     {
-                        GameConfig.CurentVolume -= 0.01f;
+                        lock (GameConfig.audioLock)
+                        {
+                            GameConfig.CurentVolume = Math.Clamp(GameConfig.CurentVolume - 0.01f, 0f, 1f);
+                            if (GameConfig.CurentVolume == 0f) GameConfig.Muted = true;
+                        }
+                    }
+                    if (k.Key == ConsoleKey.M) // toggle mute
+                    {
+                        lock (GameConfig.audioLock)
+                        {
+                            if (!GameConfig.Muted)
+                            {
+                                GameConfig.PreviousVolume = GameConfig.CurentVolume;
+                                GameConfig.CurentVolume = 0f;
+                                GameConfig.Muted = true;
+                            }
+                            else
+                            {
+                                GameConfig.CurentVolume = GameConfig.PreviousVolume;
+                                GameConfig.Muted = false;
+                            }
+                        }
                     }
                 }
                 Thread.Sleep(10);

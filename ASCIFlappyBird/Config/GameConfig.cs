@@ -57,7 +57,12 @@
         }
         public static int PrevSelectedMenu;
         public static volatile bool UpdateCursor = true;
-        public static volatile float CurentVolume = 0.2f;
+
+        //Audio
+        public static readonly object audioLock = new object();
+        public static bool Muted = false;
+        public static float CurentVolume = 0.5f;
+        public static float PreviousVolume = 0.5f;
 
 
     }

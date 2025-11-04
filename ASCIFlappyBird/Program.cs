@@ -73,6 +73,7 @@ public class Program
                 }
                 lock (GameConfig.consoleLock)
                 {
+
                     _renderer.DrawMenu(_board);
                 }
             }

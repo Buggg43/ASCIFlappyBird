@@ -19,12 +19,21 @@ namespace ASCIFlappyBird.Services
 
             if (GameConfig.GameDrawn)
             {
-
                 _audioFile = new AudioFileReader(gameMusic);
                 _volumeProvider = new VolumeSampleProvider(_audioFile.ToSampleProvider());
                 _volumeProvider.Volume = GameConfig.CurentVolume;
                 _outputDevice.Init(_volumeProvider.ToWaveProvider());
+                _outputDevice.Volume = GameConfig.CurentVolume;
                 _outputDevice.Play();
+                //while (true)
+
+                if (_outputDevice.PlaybackState == PlaybackState.Stopped)
+                {
+                    _audioFile.Position = 0;
+                    _outputDevice.Play();
+                }
+                Thread.Sleep(100);
+
             }
             else if (GameConfig.ShowMenu)
             {
@@ -32,7 +41,17 @@ namespace ASCIFlappyBird.Services
                 _volumeProvider = new VolumeSampleProvider(_audioFile.ToSampleProvider());
                 _volumeProvider.Volume = GameConfig.CurentVolume;
                 _outputDevice.Init(_volumeProvider.ToWaveProvider());
+                _outputDevice.Volume = GameConfig.CurentVolume;
                 _outputDevice.Play();
+                //while (true)
+                //{
+                if (_outputDevice.PlaybackState == PlaybackState.Stopped)
+                {
+                    _audioFile.Position = 0;
+                    _outputDevice.Play();
+                }
+                Thread.Sleep(100);
+                //}
             }
         }
 
