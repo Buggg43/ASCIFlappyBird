@@ -10,6 +10,7 @@ public class Program
     {
         Console.Title = "ASCII Flappy Bird";
         Console.CursorVisible = false;
+        InputService inputService = new InputService();
         SoundPlayerService soundPlayer = new SoundPlayerService();
         Random rng = new Random();
         BirdService _birdService = new BirdService();
@@ -38,8 +39,8 @@ public class Program
         int lastScrollOffset = -1;
         float oldSoundValue = 0.0f;
         // Game Loop
-        CancellationTokenSource inputCts = new CancellationTokenSource();
-        Task.Run(() => InputService.InputListener(inputCts.Token));
+        CancellationToken inputCt = new CancellationToken();
+        inputService.InputListener(inputCt);
         while (!GameConfig.ExitGame)
         {
             _board.WindowChanged(_board);
@@ -166,14 +167,14 @@ public class Program
             {
                 if (oldSoundValue != GameConfig.CurentVolume)
                 {
-                    oldSoundValue = GameConfig.CurentVolume;
                     _renderer.DrawSoundPanel(_board);
+                    oldSoundValue = GameConfig.CurentVolume;
                 }
             }
             if (_board.Collision) break;
         }
         Console.Clear();
-        inputCts.Cancel();
+        //inputCt.();
         soundPlayer.Dispose();
     }
 }

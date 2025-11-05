@@ -244,13 +244,19 @@ namespace ASCIFlappyBird.GameLogic
             Console.Write($"{progres}% [");
             TrySetCursorPosition(progresBarPosition.x + progresBarLength + 1, progresBarPosition.y);
             Console.Write("]");
-            Console.ForegroundColor = ConsoleColor.Red;
+
             int progresLength = progresBarPosition.x + progres;
-            for (int i = progresBarPosition.x; i <= progresLength; i++)
-            {
-                TrySetCursorPosition(i, progresBarPosition.y);
-                Console.Write("\u25A0");
-            }
+            int maxProgresLength = progresBarPosition.x + progresBarLength;
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            TrySetCursorPosition(progresBarPosition.x, progresBarPosition.y);
+            Console.Write(new string('\u25A0', progres));
+
+
+            Console.ForegroundColor = ConsoleColor.Black;
+            TrySetCursorPosition(progresLength, progresBarPosition.y);
+            Console.Write(new string('\u25A0', maxProgresLength - progresLength));
+
 
             Console.ResetColor();
         }
