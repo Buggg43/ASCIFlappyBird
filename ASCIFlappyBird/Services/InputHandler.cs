@@ -27,8 +27,15 @@ namespace ASCIFlappyBird.Services
                 case ConsoleKey.Escape:
                     if (!GameConfig.ShowMenu)
                     {
+                        //Close all windows
                         GameConfig.ShowMenu = !GameConfig.ShowMenu;
-                        GameConfig.MenuDrawn = !GameConfig.MenuDrawn;
+                        GameConfig.ShowAbout = false;
+                        GameConfig.ShowGame = false;
+                        GameConfig.ShowSoundPanel = false;
+
+                        GameConfig.MenuDrawn = false;
+                        GameConfig.GameDrawn = false;
+                        GameConfig.PauseDrawn = false;
                     }
                     break;
                 case ConsoleKey.UpArrow:

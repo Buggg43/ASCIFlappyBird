@@ -150,12 +150,14 @@ public class Program
                         }
                     }
                     _birdService.ApplyGravity(_bird, _board, BirdDtMs / 1000.0);
-                    if (_bird.Position != birdLastPosition)
+                    if (_bird.Position.y <= _board.GameWindowBottom
+                        && _bird.Position.y >= _board.GameWindowTop
+                        && _bird.Position != birdLastPosition)
                     {
                         _renderer.RemoveBird(_bird, birdLastPosition);
-                        birdLastPosition = (_bird.Position.x - _bird.Width, (int)Math.Round(_bird.VerticalPosition));
+                        birdLastPosition = (_bird.Position.x - _bird.Width, _bird.Position.y);
+                        _renderer.DrawBird(_bird);
                     }
-                    if (_bird.Position != birdLastPosition) _renderer.DrawBird(_bird);
                 }
 
             }

@@ -31,6 +31,7 @@ namespace ASCIFlappyBird.Services
                 bird.VerticalSpeed = 0;
 
             bird.Position = (bird.Position.x, (int)Math.Round(bird.VerticalPosition - halfH));
+
         }
         public bool BirdCollision(Bird bird, Board board, List<Pillar> pilars, int scrollOfset)
         {
