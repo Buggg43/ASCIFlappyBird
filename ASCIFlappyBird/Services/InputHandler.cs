@@ -26,7 +26,10 @@ namespace ASCIFlappyBird.Services
                     break;
                 case ConsoleKey.Escape:
                     if (!GameConfig.ShowMenu)
+                    {
                         GameConfig.ShowMenu = !GameConfig.ShowMenu;
+                        GameConfig.MenuDrawn = !GameConfig.MenuDrawn;
+                    }
                     break;
                 case ConsoleKey.UpArrow:
                     if (GameConfig.ShowMenu)
