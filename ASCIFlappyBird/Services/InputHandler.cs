@@ -36,6 +36,7 @@ namespace ASCIFlappyBird.Services
                         GameConfig.MenuDrawn = false;
                         GameConfig.GameDrawn = false;
                         GameConfig.PauseDrawn = false;
+
                     }
                     break;
                 case ConsoleKey.UpArrow:
