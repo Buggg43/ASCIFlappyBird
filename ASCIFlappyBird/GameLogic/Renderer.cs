@@ -160,11 +160,11 @@ namespace ASCIFlappyBird.GameLogic
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 //centering text
 
-                int menuCenter = menuStartX + (menuLength / 2);
+                int menuCenter = menuStartX + menuLength / 2;
                 int startingTextPosition = 0;
                 foreach (var item in GameConfig.MenuOptions)
                 {
-                    startingTextPosition = menuCenter - (item.Length / 2);
+                    startingTextPosition = menuCenter - item.Length / 2;
                     TrySetCursorPosition(startingTextPosition, menuOptionStartY);
                     Console.Write(item);
                     menuOptionStartY += menuOptionOffsetY;
@@ -181,16 +181,16 @@ namespace ASCIFlappyBird.GameLogic
                 GameConfig.UpdateCursor = false;
                 menuOptionStartY = menuStartY + menuOptionOffsetY;
 
-                TrySetCursorPosition(menuOptionStartX + menuOptionOffsetX, menuOptionStartY + (menuOptionOffsetY * GameConfig.SelectedMenu) + 1);
+                TrySetCursorPosition(menuOptionStartX + menuOptionOffsetX, menuOptionStartY + menuOptionOffsetY * GameConfig.SelectedMenu + 1);
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write(new string('-', menuLength - (menuOptionOffsetX * 4)));
+                Console.Write(new string('-', menuLength - menuOptionOffsetX * 4));
 
                 Console.ResetColor();
 
                 if (GameConfig.PrevSelectedMenu != GameConfig.SelectedMenu)
                 {
-                    TrySetCursorPosition(menuOptionStartX + menuOptionOffsetX, menuOptionStartY + (menuOptionOffsetY * GameConfig.PrevSelectedMenu) + 1);
-                    Console.Write(new string(' ', menuLength - (menuOptionOffsetX * 4)));
+                    TrySetCursorPosition(menuOptionStartX + menuOptionOffsetX, menuOptionStartY + menuOptionOffsetY * GameConfig.PrevSelectedMenu + 1);
+                    Console.Write(new string(' ', menuLength - menuOptionOffsetX * 4));
                     GameConfig.PrevSelectedMenu = GameConfig.SelectedMenu;
                 }
             }
@@ -230,7 +230,7 @@ namespace ASCIFlappyBird.GameLogic
         public void DrawSoundPanel(Board board)
         {
             string menuTitle = "Sound Panel";
-            TrySetCursorPosition(board.Center.x - (menuTitle.Length / 2), board.Center.y - 2);
+            TrySetCursorPosition(board.Center.x - menuTitle.Length / 2, board.Center.y - 2);
             Console.Write(menuTitle);
 
             int progresBarStartX = board.Center.x - 50;

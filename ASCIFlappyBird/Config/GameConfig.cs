@@ -53,7 +53,7 @@
         public static int SelectedMenu
         {
             get => selected;
-            set => selected = (value >= 0 && value <= 4) ? value : selected;
+            set => selected = value >= 0 && value <= 4 ? value : selected;
         }
         public static int PrevSelectedMenu;
         public static volatile bool UpdateCursor = true;

@@ -1,7 +1,9 @@
 ﻿using ASCIFlappyBird.Config;
+using ASCIFlappyBird.Enums;
 using ASCIFlappyBird.GameLogic;
 using ASCIFlappyBird.Models;
 using ASCIFlappyBird.Services;
+using ASCIFlappyBird.Services.Interfaces;
 using System.Diagnostics;
 
 public class Program
@@ -11,7 +13,7 @@ public class Program
         Console.Title = "ASCII Flappy Bird";
         Console.CursorVisible = false;
         InputService inputService = new InputService();
-        SoundPlayerService soundPlayer = new SoundPlayerService();
+        IMusicService soundPlayer = new SoundPlayerService();
         Random rng = new Random();
         BirdService _birdService = new BirdService();
         Renderer _renderer = new Renderer();
@@ -41,6 +43,7 @@ public class Program
         // Game Loop
         CancellationToken inputCt = new CancellationToken();
         inputService.InputListener(inputCt);
+        soundPlayer.Play(MusicTrack.Menu);
         while (!GameConfig.ExitGame)
         {
             _board.WindowChanged(_board);
@@ -66,11 +69,11 @@ public class Program
             {
                 if (!GameConfig.MenuDrawn)
                 {
-                    soundPlayer.Dispose();
+                    //soundPlayer.Dispose();
                     sw.Stop();
                     GameConfig.GameDrawn = false;
                     Console.Clear();
-                    soundPlayer.Play();
+
                 }
                 lock (GameConfig.consoleLock)
                 {
@@ -100,7 +103,7 @@ public class Program
                     GameConfig.GameDrawn = true;
                     GameConfig.PauseDrawn = false;
                     GameConfig.MenuDrawn = false;
-                    soundPlayer.Play();
+                    soundPlayer.Play(MusicTrack.Game);
                 }
 
                 var elapsedMs = sw.Elapsed.TotalMilliseconds;
